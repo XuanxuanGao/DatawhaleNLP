@@ -53,7 +53,9 @@ def label_distribution():
     12     1821
     13      908
     """
-    data_train['label'].hist()
+    data_train['label'].value_counts().plot(kind='bar') # bar图，频数，可以不挨着，适合有限个离散变量的频数统计
+    plt.title('News class count')
+    plt.xlabel("category")
     plt.show()
 
 def generate_submission_file():
