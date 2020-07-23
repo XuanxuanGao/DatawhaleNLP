@@ -14,7 +14,7 @@ def count_feature():
     train_df = read_data('./data/train_set.csv')
     print(train_df.head())
 
-    ## 1.句子长度
+    ## 1.每篇文章字符个数（不去重）
     train_df['text_len'] = train_df['text'].apply(lambda x: len(x.split(" ")))
     print(train_df['text_len'].describe())
     """
