@@ -28,7 +28,7 @@ def count_feature():
     max       57921.000000
     Name: text_len, dtype: float64
     """
-    train_df['text_len'].hist(bins=200) # hist图，也是频数，bar图，相邻两个变量所在的桶得挨着，适合个数较多的离散变量的频数统计
+    train_df['text_len'].hist(bins=200) # hist图，也是频数，与bar图不同的是，hist图相邻两个变量所在的桶得挨着，适合个数较多的离散变量的频数统计
     plt.xlabel("Text char count")
     plt.title("Histogram of char count")
     plt.show()
