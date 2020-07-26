@@ -60,8 +60,8 @@ def text_classification_fastText():
         print("###" * 35)
         data_train_kfold_path = train_foldk_path.format(k=str(i+1))
         data_valid_kfold_path = valid_foldk_path.format(k=str(i+1))
-        model_path = model_foldk_path.format(k=str(i+1))
-        print(model_path)
+        model_foldk_path = model_foldk_path.format(k=str(i+1))
+        print(model_foldk_path)
 
         ####### prepare data
         train_df['label_ft'] = '__label__' + train_df['label'].astype(str)
