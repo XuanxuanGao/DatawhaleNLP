@@ -19,7 +19,7 @@ def text_classification_tradition():
 
     """
     传统的文本表示方法:
-    1. One-hot：很少应用，因为词太多了
+    1. One-hot
     2. BOW（Bag of Words，词袋表示）
     3. N-gram
     4. TF-IDF
@@ -33,7 +33,52 @@ def text_classification_tradition():
     ... ]
     详见：https://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction.text
     """
-    # 1. one-hot: https://zhuanlan.zhihu.com/p/67856266
+
+    # from sklearn.preprocessing import OneHotEncoder
+    #
+    # # 语料库里所有单词的集合
+    # words_set = set(' '.join(list(data['text'])).split(' '))
+    #
+    # # 对每个单词编号，得到其索引（这一步也可以用sklearn的LabelEncoder来实现）
+    # word2idx = {}
+    # idx2word = {}
+    # for i, word in enumerate(words_set):
+    #     word2idx[word] = i + 1
+    #     idx2word[i + 1] = word
+    # print(word2idx)
+    # """
+    # {'6981': 1, '6307': 2, '5367': 3, '1066': 4,...}
+    # """
+    #
+    # # OneHotEncoder输入为shape=(N_words,1)的索引值，输出为各索引值下的one-hot向量word_onehot
+    # idx = list(word2idx.values())
+    # idx = np.array(idx).reshape(len(idx), -1)
+    # print(idx.shape) #(2958, 1)
+    # print(idx)
+    # """
+    # [[   1]
+    #  [   2]
+    #  [   3]
+    #  ...
+    #  [2956]
+    #  [2957]
+    #  [2958]]
+    # """
+    # onehotenc = OneHotEncoder()
+    # onehotenc.fit(idx)
+    # word_onehot = onehotenc.transform(idx).toarray()
+    # for i, word_onehot_i in enumerate(word_onehot):
+    #     print("{0}\t-->\t{1}".format(idx2word[i + 1], word_onehot_i))
+    # """
+    # 6981	-->	[1. 0. 0. ... 0. 0. 0.]
+    # 6307	-->	[0. 1. 0. ... 0. 0. 0.]
+    # """
+    #
+    # # 用法：给定word，找到它的idx，然后从word_onehot里取出对应的one-hot向量
+    # x = word_onehot[word2idx['6981']]
+    # print(x) #word 6981 的idx 对应的one-hot向量
+
+
     # 2. BOW: CountVectorizer
     corpus = data['text'].values
     vectorizer = CountVectorizer(max_features=3000)
@@ -79,7 +124,7 @@ def text_classification_tradition():
     # 4. TF-IDF: TfidfVectorizer
     corpus = data['text'].values
     vectorizer = TfidfVectorizer(ngram_range=(1,3), max_features=3000)
-    vectorizer.fit(corpus)  # 用训练集和测试集的所有语料训练特征提取器
+    vectorizer.fit(corpus)
     X_train_all = vectorizer.transform(train_df['text'].values)
     y_train_all = train_df['label'].values
     X_test = vectorizer.transform(test_df['text'].values)
