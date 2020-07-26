@@ -47,14 +47,31 @@ def text_classification_tradition():
     clf.fit(X_train, y_train)
     y_valid_pred = clf.predict(X_valid)
     print("f1 score: %.6f" % f1_score(y_valid, y_valid_pred, average='macro'))
+    """
+    f1 score: 0.820636
+    """
 
     y_test_pred = clf.predict(X_test)
     test_df['label'] = y_test_pred
-    print(test_df.shape)  #
+    print(test_df.shape)  # (50000, 2)
     test_df[['label']].to_csv('./data/submission_bow_20200725.csv', index=False)
     print(test_df['label'].value_counts())
     """
-    
+    1     11305
+    0     10942
+    2      8012
+    3      5798
+    4      3311
+    5      2740
+    6      1975
+    7      1563
+    9      1134
+    8      1128
+    10     1085
+    11      548
+    12      322
+    13      137
+    Name: label, dtype: int64
     """
 
     # 3. N-gram: CountVectorizer(ngram_range=(1,N))
@@ -72,6 +89,9 @@ def text_classification_tradition():
     clf.fit(X_train, y_train)
     y_valid_pred = clf.predict(X_valid)
     print("f1 score: %.6f" % f1_score(y_valid, y_valid_pred, average='macro'))
+    """
+    f1 score: 0.897664
+    """
 
     y_test_pred = clf.predict(X_test)
     test_df['label'] = y_test_pred
@@ -79,7 +99,21 @@ def text_classification_tradition():
     test_df[['label']].to_csv('./data/submission_tfidf_20200725.csv', index=False)
     print(test_df['label'].value_counts())
     """
-    
+    0     9805
+    1     9558
+    2     7990
+    3     5753
+    4     3787
+    5     3064
+    6     2355
+    7     2016
+    8     1816
+    9     1378
+    10    1158
+    11     712
+    12     405
+    13     203
+    Name: label, dtype: int64
     """
 
 
