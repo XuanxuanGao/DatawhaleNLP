@@ -47,7 +47,9 @@ def text_classification_fastText():
     model_foldk_path = './model/model_fasttext_fold_{k}.bin'
 
     train_df = pd.read_csv(train_path, sep='\t')
+    train_df['text'] = train_df['text'].apply(lambda x: x.replace(' 3750', '').replace(' 648', '').replace(' 900', ''))
     test_df = pd.read_csv(test_path, sep='\t')
+    test_df['text'] = test_df['text'].apply(lambda x: x.replace(' 3750', '').replace(' 648', '').replace(' 900', ''))
     print(train_df.shape)
     print(test_df.shape)
 
@@ -60,8 +62,8 @@ def text_classification_fastText():
         print("###" * 35)
         data_train_kfold_path = train_foldk_path.format(k=str(i+1))
         data_valid_kfold_path = valid_foldk_path.format(k=str(i+1))
-        model_foldk_path = model_foldk_path.format(k=str(i+1))
-        print(model_foldk_path)
+        model_kfold_path = model_foldk_path.format(k=str(i+1))
+        print(model_kfold_path)
 
         ####### prepare data
         train_df['label_ft'] = '__label__' + train_df['label'].astype(str)
@@ -69,10 +71,10 @@ def text_classification_fastText():
         train_df[['text', 'label']].iloc[valid_index].to_csv(data_valid_kfold_path, index=None, sep='\t')  # 验证集
 
         # 模型训练及保存
-        model = fasttext.train_supervised(data_train_kfold_path, lr=1.0, wordNgrams=2, verbose=2, minCount=1, epoch=25, loss="hs")
+        model = fasttext.train_supervised(data_train_kfold_path, lr=1.0, dim=64, ws=10, wordNgrams=3, verbose=2, minCount=1, epoch=10, loss="hs")
         # print(model.words[:5])  # ['3750', '648', '900', '3370', '6122']
         # print(model.labels)  # ['__label__0', '__label__1', '__label__2', '__label__3', '__label__4', '__label__5', '__label__6', '__label__7', '__label__8', '__label__9', '__label__10', '__label__11', '__label__12', '__label__13']
-        model.save_model(model_foldk_path)
+        model.save_model(model_kfold_path)
 
         # # 查看性能
         # def print_results(N, p, r):
@@ -100,7 +102,7 @@ def text_classification_fastText():
         # """
 
         # # 模型验证
-        model = fasttext.load_model(model_foldk_path)
+        model = fasttext.load_model(model_kfold_path)
         # print(model.predict(["3750 648 900","3370 6122"]))  # ([['__label__8'], ['__label__8']], [array([1.00005], dtype=float32), array([0.9955089], dtype=float32)])
         valid_df = pd.read_csv(data_valid_kfold_path, sep='\t')
         X_valid = list(valid_df['text'])
@@ -127,7 +129,7 @@ def text_classification_fastText():
     test_df['label'] = sub_pred_avg
     test_df['label'] = test_df['label'].apply(lambda x: int(round(x, 0)))
     print(test_df.shape)  #
-    test_df[['label']].to_csv('./data/submission_fasttext_20200727.csv', index=False)
+    test_df[['label']].to_csv('./data/submission_fasttext_20200728.csv', index=False)
     print(test_df['label'].value_counts())
 
 
